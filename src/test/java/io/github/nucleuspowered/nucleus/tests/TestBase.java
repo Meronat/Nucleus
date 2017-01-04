@@ -25,6 +25,7 @@ import io.github.nucleuspowered.nucleus.internal.docgen.DocGenCache;
 import io.github.nucleuspowered.nucleus.internal.messages.MessageProvider;
 import io.github.nucleuspowered.nucleus.internal.messages.ResourceMessageProvider;
 import io.github.nucleuspowered.nucleus.internal.qsml.NucleusConfigAdapter;
+import io.github.nucleuspowered.nucleus.internal.services.ScheduledManager;
 import io.github.nucleuspowered.nucleus.internal.services.WarmupManager;
 import io.github.nucleuspowered.nucleus.internal.teleport.NucleusTeleportHandler;
 import io.github.nucleuspowered.nucleus.internal.text.TextParsingUtils;
@@ -131,6 +132,11 @@ public abstract class TestBase {
         }
 
         @Override public Injector getInjector() {
+            return null;
+        }
+
+        @Override
+        public ScheduledManager getScheduledManager() {
             return null;
         }
 

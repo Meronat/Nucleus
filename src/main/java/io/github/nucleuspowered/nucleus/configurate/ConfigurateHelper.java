@@ -13,12 +13,16 @@ import io.github.nucleuspowered.neutrino.typeserialisers.PatternTypeSerialiser;
 import io.github.nucleuspowered.neutrino.typeserialisers.SetTypeSerialiser;
 import io.github.nucleuspowered.neutrino.typeserialisers.ShortArrayTypeSerialiser;
 import io.github.nucleuspowered.nucleus.Nucleus;
+import io.github.nucleuspowered.nucleus.configurate.typeserialisers.DelayedTimeValueSerialiser;
 import io.github.nucleuspowered.nucleus.configurate.typeserialisers.InstantTypeSerialiser;
 import io.github.nucleuspowered.nucleus.configurate.typeserialisers.NucleusItemStackSnapshotSerialiser;
 import io.github.nucleuspowered.nucleus.configurate.typeserialisers.NucleusTextTemplateTypeSerialiser;
 import io.github.nucleuspowered.nucleus.configurate.typeserialisers.Vector3dTypeSerialiser;
+import io.github.nucleuspowered.nucleus.configurate.typeserialisers.WarningTimeListSerialiser;
 import io.github.nucleuspowered.nucleus.configurate.wrappers.NucleusItemStackSnapshot;
 import io.github.nucleuspowered.nucleus.internal.text.NucleusTextTemplateImpl;
+import io.github.nucleuspowered.nucleus.util.DelayedTimeValue;
+import io.github.nucleuspowered.nucleus.util.WarningTimeList;
 import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.commented.SimpleCommentedConfigurationNode;
@@ -88,6 +92,9 @@ public class ConfigurateHelper {
                 typeToken -> Set.class.isAssignableFrom(typeToken.getRawType()),
                 new SetTypeSerialiser()
         );
+
+        tsc.registerType(TypeToken.of(DelayedTimeValue.class), new DelayedTimeValueSerialiser());
+        tsc.registerType(TypeToken.of(WarningTimeList.class), new WarningTimeListSerialiser());
 
         tsc.registerType(new TypeToken<byte[]>(){}, new ByteArrayTypeSerialiser());
         tsc.registerType(new TypeToken<short[]>(){}, new ShortArrayTypeSerialiser());

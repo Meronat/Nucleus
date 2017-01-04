@@ -19,6 +19,7 @@ import com.typesafe.config.ConfigException;
 import io.github.nucleuspowered.nucleus.api.NucleusAPITokens;
 import io.github.nucleuspowered.nucleus.api.service.NucleusMessageTokenService;
 import io.github.nucleuspowered.nucleus.api.service.NucleusModuleService;
+import io.github.nucleuspowered.nucleus.api.service.NucleusScheduledManagerService;
 import io.github.nucleuspowered.nucleus.api.service.NucleusWarmupManagerService;
 import io.github.nucleuspowered.nucleus.config.CommandsConfig;
 import io.github.nucleuspowered.nucleus.configurate.ConfigurateHelper;
@@ -50,6 +51,7 @@ import io.github.nucleuspowered.nucleus.internal.qsml.NucleusConfigAdapter;
 import io.github.nucleuspowered.nucleus.internal.qsml.NucleusLoggerProxy;
 import io.github.nucleuspowered.nucleus.internal.qsml.QuickStartModuleConstructor;
 import io.github.nucleuspowered.nucleus.internal.qsml.event.BaseModuleEvent;
+import io.github.nucleuspowered.nucleus.internal.services.ScheduledManager;
 import io.github.nucleuspowered.nucleus.internal.services.WarmupManager;
 import io.github.nucleuspowered.nucleus.internal.teleport.NucleusTeleportHandler;
 import io.github.nucleuspowered.nucleus.internal.text.NucleusTokenServiceImpl;
@@ -138,6 +140,8 @@ public class NucleusPlugin extends Nucleus {
     private final EconHelper econHelper = new EconHelper(this);
     private final PermissionRegistry permissionRegistry = new PermissionRegistry();
 
+    private ScheduledManager scheduledManager;
+
     private DiscoveryModuleContainer moduleContainer;
 
     private final Map<String, TextFileController> textFileControllers = Maps.newHashMap();
@@ -204,6 +208,7 @@ public class NucleusPlugin extends Nucleus {
             userCacheService = new UserCacheService(d.getUserCacheDataProvider());
             warmupManager = new WarmupManager();
             textParsingUtils = new TextParsingUtils(this);
+            scheduledManager = new ScheduledManager(this);
             nameUtil = new NameUtil(this);
         } catch (Exception e) {
             isErrored = e;
@@ -217,8 +222,10 @@ public class NucleusPlugin extends Nucleus {
         // We register the ModuleService NOW so that others can hook into it.
         game.getServiceManager().setProvider(this, NucleusModuleService.class, new ModuleRegistrationProxyService(this));
         game.getServiceManager().setProvider(this, NucleusWarmupManagerService.class, warmupManager);
+        game.getServiceManager().setProvider(this, NucleusScheduledManagerService.class, scheduledManager);
         this.injector = Guice.createInjector(new QuickStartInjectorModule(this));
         serviceManager.registerService(WarmupManager.class, warmupManager);
+        serviceManager.registerService(ScheduledManager.class, scheduledManager);
 
         nucleusChatService = new NucleusTokenServiceImpl(this);
         serviceManager.registerService(NucleusTokenServiceImpl.class, nucleusChatService);
@@ -471,6 +478,11 @@ public class NucleusPlugin extends Nucleus {
         }
 
         return this.warmupConfig;
+    }
+
+    @Override
+    public ScheduledManager getScheduledManager() {
+        return scheduledManager;
     }
 
     @Override
