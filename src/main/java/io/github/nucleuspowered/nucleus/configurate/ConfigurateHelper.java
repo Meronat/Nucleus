@@ -92,6 +92,8 @@ public class ConfigurateHelper {
                 typeToken -> Set.class.isAssignableFrom(typeToken.getRawType()),
                 new SetTypeSerialiser()
         );
+        tsc.registerType(TypeToken.of(DelayedTimeValue.class), new DelayedTimeValueSerialiser());
+        tsc.registerType(TypeToken.of(WarningTimeList.class), new WarningTimeListSerialiser());
 
         tsc.registerType(TypeToken.of(DelayedTimeValue.class), new DelayedTimeValueSerialiser());
         tsc.registerType(TypeToken.of(WarningTimeList.class), new WarningTimeListSerialiser());

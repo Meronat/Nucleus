@@ -137,6 +137,7 @@ public class NucleusPlugin extends Nucleus {
     private MessageProvider commandMessageProvider = new ResourceMessageProvider(ResourceMessageProvider.commandMessagesBundle);
 
     private WarmupManager warmupManager;
+
     private final EconHelper econHelper = new EconHelper(this);
     private final PermissionRegistry permissionRegistry = new PermissionRegistry();
 
@@ -208,6 +209,7 @@ public class NucleusPlugin extends Nucleus {
             userCacheService = new UserCacheService(d.getUserCacheDataProvider());
             warmupManager = new WarmupManager();
             textParsingUtils = new TextParsingUtils(this);
+            scheduledManager = new ScheduledManager(this);
             scheduledManager = new ScheduledManager(this);
             nameUtil = new NameUtil(this);
         } catch (Exception e) {
